@@ -1,9 +1,13 @@
 'use strict';
 
 const path = require('path');
-module.exports = function (file, mapPath) {
-	let relativePath = path.relative(file.base, file.path);
-	let firstFolder = relativePath.split(path.sep)[0];
-
-	return path.join(file.base, firstFolder, mapPath);
+module.exports = {
+	findFullMapFilePath : function (file, mapFileGlobPath) {
+		let firstFolder = this.findFirstDistinctFolder(file.base, file.path);
+		return path.join(file.base, firstFolder, mapFileGlobPath);
+	},
+	findFirstDistinctFolder: function (basePath, fullPath) {
+		let relativePath = path.relative(basePath, fullPath);
+		return relativePath.split(path.sep)[0];
+	}
 };
