@@ -6,6 +6,6 @@ const PLUGIN_NAME = 'gulp-subdir-mapper';
 
 const stream = require('./src/stream');
 
-module.exports = function () {
-	return stream;
+module.exports = function (options) {
+	return stream(options);
 };
