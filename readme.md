@@ -46,25 +46,27 @@ With `gulp-subdir-rename`, it is as easy as this:
 ```JavaScript
 // gulpfile.js
 
-let gulp = require('gulp'),
-    subdirRename = require('gulp-subdir-rename');
-    
-gulp.task('pull', function(){
-    gulp.src('./app/**/**.*')
-    .pipe(subdirRename({
-                baseFile: './module.json',
-                renameTo: function(baseFileData){
-                    var parsedJSON = JSON.parse(baseFileData);
-                    return parsedJSON.moduleName;
-                }
-            }))
-    .pipe(gulp.dest('./build/');
+var gulp = require('gulp'),
+	subdirRename = require('gulp-subdir-rename');
+
+
+gulp.task('default', function () {
+	gulp.src('./source/**/**.*')
+		.pipe(subdirRename({
+			baseFile : 'module.json',
+			renameTo : function (baseFileData) {
+				var moduleJSON = JSON.parse(baseFileData);
+				return moduleJSON.moduleName;
+			}
+		}))
+		.pipe(gulp.dest('./target'));
 });
 ```
+Also see the '/examples'-Folder.
 
 ### Usage
 `gulp-subdir-rename` renames the first subfolder after the base-path of what you `gulp.src()`. The base-path is usually
-where the glob starts, so for example for a  `gulp.src('base/path/**')` it would be `/base/path`.
+where the glob starts, so for example for a  `gulp.src('/base/path/**')` it would be `/base/path`.
 
 `require(gulp-subdir-rename)` returns a function that accepts an options-object with two parameters:
 
