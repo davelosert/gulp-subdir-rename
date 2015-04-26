@@ -6,13 +6,13 @@
 
 var gulp = require('gulp'),
 	through = require('through2'),
-	subdirMapper = require('./../index'),
+	subdirRename = require('./../index'),
 	fs = require('fs');
 
 
 gulp.task('default', function () {
 	gulp.src('./source/**/**.*')
-		.pipe(subdirMapper({
+		.pipe(subdirRename({
 			baseFile : 'module.json',
 			renameTo : function (baseFileData) {
 				var moduleJSON = JSON.parse(baseFileData);
