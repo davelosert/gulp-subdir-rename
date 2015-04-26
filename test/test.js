@@ -37,8 +37,13 @@ describe('stream', function () {
 			findFullMapFilePath : sinon.stub().returns('/stub/path/module.json'),
 			findFirstDistinctFolder : sinon.stub().returns('pathToBeReplaced')
 		};
+		let fsStub = {
+			readFile : sinon.stub().yields(null, 'This is testcontent!')
+		};
+
 		stream = proxyquire('../src/stream', {
-			'./mapFileFinder.js' : mapFileFinderStub
+			'./mapFileFinder.js' : mapFileFinderStub,
+			'fs' : fsStub
 		});
 
 		options = {
@@ -88,9 +93,9 @@ describe('stream', function () {
 		expect(options.mapFunc).to.have.been.called;
 	});
 
-	it('should call options.mapFunc with results of mapFileFinder', function () {
+	it('should call options.mapFunc with the contents of the mapfile', function () {
 		myStream.write(testFile);
-		expect(options.mapFunc).to.have.been.calledWith('/stub/path/module.json');
+		expect(options.mapFunc).to.have.been.calledWith('This is testcontent!');
 	});
 
 	it('should call mapFileFinder to find first distinct folder', function () {
@@ -106,6 +111,18 @@ describe('stream', function () {
 	it('should modify files sub-path', function () {
 		myStream.write(testFile);
 		expect(testFile.path).to.equal('/stub/path/replacementSubPath/testFile.js')
+	});
+
+	it('it should store already found subpath', function () {
+		let testFile2 =  new Vinyl({
+			base : '/stub/path',
+			path : '/stub/path/pathToBeReplaced/testFile2.js',
+			contents : new Buffer("This is testcontent!")
+		});
+		myStream.write(testFile);
+		myStream.write(testFile2);
+		expect(options.mapFunc).to.have.callCount(1);
+		expect(testFile2.path).to.equal('/stub/path/replacementSubPath/testFile2.js')
 	});
 });
 
