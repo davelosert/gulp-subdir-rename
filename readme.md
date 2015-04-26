@@ -45,9 +45,13 @@ app
 With `gulp-subdir-rename`, it is as easy as this:
 ```JavaScript
 // gulpfile.js
+
+let gulp = require('gulp'),
+    subdirRename = require('gulp-subdir-rename');
+    
 gulp.task('pull', function(){
     gulp.src('./app/**/**.*')
-    .pipe(subdirMapper({
+    .pipe(subdirRename({
                 baseFile: './module.json',
                 renameTo: function(baseFileData){
                     var parsedJSON = JSON.parse(baseFileData);
@@ -59,11 +63,21 @@ gulp.task('pull', function(){
 ```
 
 ### Usage
-`gulp-subdir-rename` renames the first subfolder after the base-path of your `gulp-src` (the base path is usually where
-the glob starts, so for example for `base/path/**` it would be `/base/path`). 
+`gulp-subdir-rename` renames the first subfolder after the base-path of what you `gulp.src()`. The base-path is usually
+where the glob starts, so for example for a  `gulp.src('base/path/**')` it would be `/base/path`.
 
-`gulp-subdir-rename` returns a function that accepts an options-object with two parameters:
+`require(gulp-subdir-rename)` returns a function that accepts an options-object with two parameters:
 
-* **baseFile** - *string* : The relative path to the file you wanna pull the subdirectories name from. Its full path will be used as a parameter
-for the *renameTo*-Function. The path to the `baseFile` must be relative to the subfolder to be renamed.
-* **renameTo** - *function(baseFile)* : The functions return value will be used as the new subdirectories name. As a parameter, it recieves the full path to the *baseFile* specified above.
+* **baseFile** - *string* : Path to the file you wanna pull the subdirectories name from. The Path must be relative
+to the subdirectory that's to be renamed (so the first directy after the base-path). It's content will be given as a
+paramter to `renameTo()`.
+* **renameTo** - *function(baseFileContent)* : The functions return value will be used as the new subdirectories name.
+It's parameter are the contents of the specified `baseFile` (as a string).
+
+### Limitations
+There are some limitations to the functionality of this plugin, as it is suffice as it is to my own requirements
+right now and i tried to keep it as simple as possible. If you wish for enhancements, just let me know or simply put
+up a pull-request. Known Limitations are:
+
+* As stated several times, the only directory that can be renamed is the first one after the base-path
+* The `renamteTo()`-Function can only handle synchronous functions
