@@ -3,21 +3,21 @@
  * Created by dave on 18.04.15.
  */
 
-const chai = require('chai'),
+var chai = require('chai'),
 	sinon = require('sinon'),
 	sinonChai = require("sinon-chai"),
 	proxyquire = require('proxyquire').noPreserveCache(),
 	expect = chai.expect;
 chai.use(sinonChai);
 
-const Vinyl = require('vinyl'),
+var Vinyl = require('vinyl'),
 	Stream = require('stream').Stream,
 	gutil = require('gulp-util'),
 	es = require('event-stream');
 
 
 describe('gulp-subdir-mapper', function () {
-	const subdirMapper = require('../index');
+	var subdirMapper = require('../index');
 	describe('require()', function () {
 		it('should return a function', function () {
 			expect(subdirMapper).to.be.a('function');
@@ -26,7 +26,7 @@ describe('gulp-subdir-mapper', function () {
 });
 
 describe('stream', function () {
-	let stream,
+	var stream,
 		options,
 		myStream,
 		testFile,
@@ -37,7 +37,7 @@ describe('stream', function () {
 			findFullMapFilePath : sinon.stub().returns('/stub/path/module.json'),
 			findFirstDistinctFolder : sinon.stub().returns('pathToBeReplaced')
 		};
-		let fsStub = {
+		var fsStub = {
 			readFile : sinon.stub().yields(null, 'This is testcontent!')
 		};
 
@@ -47,8 +47,8 @@ describe('stream', function () {
 		});
 
 		options = {
-			mapFile : 'module.json',
-			mapFunc : sinon.stub().returns('replacementSubPath')
+			baseFile : 'module.json',
+			renameTo : sinon.stub().returns('replacementSubPath')
 		};
 
 		myStream = stream(options);
@@ -83,19 +83,19 @@ describe('stream', function () {
 		expect(mapFileFinderStub.findFullMapFilePath).to.have.been.called;
 	});
 
-	it('should call mapFileFinder with "file" and "mapFile" from options', function () {
+	it('should call mapFileFinder with "file" and "baseFile" from options', function () {
 		myStream.write(testFile);
-		expect(mapFileFinderStub.findFullMapFilePath).to.have.been.calledWith(testFile, options.mapFile);
+		expect(mapFileFinderStub.findFullMapFilePath).to.have.been.calledWith(testFile, options.baseFile);
 	});
 
-	it('should call options.mapFunc', function () {
+	it('should call options.renameTo', function () {
 		myStream.write(testFile);
-		expect(options.mapFunc).to.have.been.called;
+		expect(options.renameTo).to.have.been.called;
 	});
 
-	it('should call options.mapFunc with the contents of the mapfile', function () {
+	it('should call options.renameTo with the contents of the mapfile', function () {
 		myStream.write(testFile);
-		expect(options.mapFunc).to.have.been.calledWith('This is testcontent!');
+		expect(options.renameTo).to.have.been.calledWith('This is testcontent!');
 	});
 
 	it('should call mapFileFinder to find first distinct folder', function () {
@@ -113,21 +113,21 @@ describe('stream', function () {
 		expect(testFile.path).to.equal('/stub/path/replacementSubPath/testFile.js')
 	});
 
-	it('it should store already found subpath', function () {
-		let testFile2 =  new Vinyl({
+	it('should store already found subpath', function () {
+		var testFile2 =  new Vinyl({
 			base : '/stub/path',
 			path : '/stub/path/pathToBeReplaced/testFile2.js',
 			contents : new Buffer("This is testcontent!")
 		});
 		myStream.write(testFile);
 		myStream.write(testFile2);
-		expect(options.mapFunc).to.have.callCount(1);
+		expect(options.renameTo).to.have.callCount(1);
 		expect(testFile2.path).to.equal('/stub/path/replacementSubPath/testFile2.js')
 	});
 });
 
 describe('mapFileFinder', function () {
-	const mapFileFinder = require('../src/mapFileFinder');
+	var mapFileFinder = require('../src/mapFileFinder');
 
 	it('should return a object', function () {
 		expect(mapFileFinder).to.be.a('object');
@@ -140,11 +140,11 @@ describe('mapFileFinder', function () {
 		});
 
 		it('should extract the subdir masked with **', function () {
-			let testFile = new Vinyl({
+			var testFile = new Vinyl({
 				base : '/path/until/glob',
 				path : '/path/until/glob/and/to/file.js'
 			});
-			let mapPath = 'module.json';
+			var mapPath = 'module.json';
 			var subDir = mapFileFinder.findFullMapFilePath(testFile, mapPath);
 			expect(subDir).to.equal('/path/until/glob/and/module.json');
 		});
@@ -157,9 +157,9 @@ describe('mapFileFinder', function () {
 		});
 
 		it('should return the first distinct folder', function () {
-			let basePath = '/path/to/a/folder';
-			let fullPath = '/path/to/a/folder/with/a/file';
-			let result = mapFileFinder.findFirstDistinctFolder(basePath, fullPath);
+			var basePath = '/path/to/a/folder';
+			var fullPath = '/path/to/a/folder/with/a/file';
+			var result = mapFileFinder.findFirstDistinctFolder(basePath, fullPath);
 			expect(result).to.equal('with');
 		});
 	});

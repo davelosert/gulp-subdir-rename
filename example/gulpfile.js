@@ -4,7 +4,7 @@
  */
 
 
-const gulp = require('gulp'),
+var gulp = require('gulp'),
 	through = require('through2'),
 	subdirMapper = require('./../index'),
 	fs = require('fs');
@@ -13,10 +13,9 @@ const gulp = require('gulp'),
 gulp.task('default', function () {
 	gulp.src('./source/**/**.*')
 		.pipe(subdirMapper({
-			mapFile: 'module.json',
-			mapFunc : function (modulePath) {
-				let moduleJSONRaw = fs.readFileSync(modulePath);
-				let moduleJSON = JSON.parse(moduleJSONRaw);
+			baseFile : 'module.json',
+			renameTo : function (baseFileData) {
+				var moduleJSON = JSON.parse(baseFileData);
 				return moduleJSON.moduleName;
 			}
 		}))

@@ -1,18 +1,18 @@
 'use strict';
 
-const through = require('through2'),
+var through = require('through2'),
 	fs = require('fs'),
 	mapFileFinder = require('./mapFileFinder.js');
 
 
-const pathMapStore = new Map();
+var pathMapStore = new Map();
 
 module.exports = function (options) {
-	let stream = function (file, encoding, callback) {
-		let self = this;
+	var stream = function (file, encoding, callback) {
+		var self = this;
 
-		let mapFilePath = mapFileFinder.findFullMapFilePath(file, options.mapFile);
-		let oldSubPathName = mapFileFinder.findFirstDistinctFolder(file.base, file.path);
+		var mapFilePath = mapFileFinder.findFullMapFilePath(file, options.baseFile);
+		var oldSubPathName = mapFileFinder.findFirstDistinctFolder(file.base, file.path);
 
 		findNewSubPath(mapFilePath, function (err, newSubPathName) {
 			file.path = file.path.replace(oldSubPathName, newSubPathName);
@@ -24,11 +24,11 @@ module.exports = function (options) {
 
 	function findNewSubPath(mapFilePath, cb) {
 		if (pathMapStore.get(mapFilePath)) {
-			let newSubPathName = pathMapStore.get(mapFilePath);
+			var newSubPathName = pathMapStore.get(mapFilePath);
 			cb(null, newSubPathName);
 		} else {
 			fs.readFile(mapFilePath, function (err, data) {
-				let newSubPathName = options.mapFunc(data);
+				var newSubPathName = options.renameTo(data);
 				pathMapStore.set(mapFilePath, newSubPathName);
 				cb(null, newSubPathName);
 			});
