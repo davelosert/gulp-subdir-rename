@@ -12,8 +12,7 @@ chai.use(sinonChai);
 
 var Vinyl = require('vinyl'),
 	Stream = require('stream').Stream,
-	gutil = require('gulp-util'),
-	es = require('event-stream');
+    gutil = require('gulp-util');
 
 
 describe('gulp-subdir-mapper', function () {
@@ -22,6 +21,12 @@ describe('gulp-subdir-mapper', function () {
 		it('should return a function', function () {
 			expect(subdirMapper).to.be.a('function');
 		});
+        it('should throw if options missing', function () {
+            var funcWrapper = function () {
+                subdirMapper();
+            };
+            expect(funcWrapper).to.throw('Both options `baseFile` and `renameTo` must be given!');
+        });
 	});
 });
 
@@ -124,6 +129,22 @@ describe('stream', function () {
 		expect(options.renameTo).to.have.callCount(1);
 		expect(testFile2.path).to.equal('/stub/path/replacementSubPath/testFile2.js')
 	});
+
+    it('should throw if fs throws', function () {
+        var fsStub = {
+            readFile : sinon.stub().yields(new Error('File not found!'))
+        };
+
+        stream = proxyquire('../src/stream', {
+            './mapFileFinder.js' : mapFileFinderStub,
+            'fs' : fsStub
+        });
+        myStream = stream(options);
+        var funcWrapper = function () {
+            myStream.write(testFile);
+        };
+        expect(funcWrapper).to.throw('gulp-subdir-rename - Error while reading baseFile: File not found!');
+    });
 });
 
 describe('mapFileFinder', function () {
