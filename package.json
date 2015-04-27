@@ -1,7 +1,7 @@
 {
   "name": "gulp-subdir-mapper",
   "version": "1.0.0",
-  "description": "Allows you to dynamically change the subdirectory of files passed to gulp before they are passed to the destination.",
+  "description": "Dynamically rename subdirectories on a per-file-basis.",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive --ui bdd ./test"
