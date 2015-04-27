@@ -13,7 +13,7 @@ var gulp = require('gulp'),
 gulp.task('default', function () {
 	gulp.src('./source/**/**.*')
 		.pipe(subdirRename({
-			baseFile : 'module.json',
+			baseFile : './module.json',
 			renameTo : function (baseFileData) {
 				var moduleJSON = JSON.parse(baseFileData);
 				return moduleJSON.moduleName;
