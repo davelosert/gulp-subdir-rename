@@ -37,11 +37,13 @@ function subdirRename(options) {
 			cb(null, newSubDirName);
 		} else {
 			fs.readFile(mapFilePath, function (err, data) {
-                if(err){ return cb(err); }
+                if (err) {
+                    return cb(err);
+                }
 
-				var newSubPathName = options.renameTo(data);
-				pathMapStore.set(mapFilePath, newSubPathName);
-				cb(null, newSubPathName);
+                var newSubPathName = options.renameTo(data);
+                pathMapStore.set(mapFilePath, newSubPathName);
+                cb(null, newSubPathName);
 			});
 		}
 	}
