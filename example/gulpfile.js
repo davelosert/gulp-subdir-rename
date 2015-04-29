@@ -5,9 +5,7 @@
 
 
 var gulp = require('gulp'),
-	through = require('through2'),
-	subdirRename = require('./../index'),
-	fs = require('fs');
+	subdirRename = require('./../index');
 
 
 gulp.task('default', function () {
