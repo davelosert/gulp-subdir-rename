@@ -11,9 +11,7 @@ var chai = require('chai'),
 chai.use(sinonChai);
 
 var Vinyl = require('vinyl'),
-	Stream = require('stream').Stream,
-    gutil = require('gulp-util');
-
+	Stream = require('stream').Stream;
 
 describe('gulp-subdir-mapper', function () {
 	var subdirMapper = require('../index');
