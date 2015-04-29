@@ -7,10 +7,18 @@
 		"test": "./node_modules/mocha/bin/mocha --recursive --ui bdd ./test"
 	},
 	"keywords": [
-		"gulpplugin", "rename", "directory", "folder", "gulp"
+		"gulpplugin",
+		"rename",
+		"directory",
+		"folder",
+		"gulp"
 	],
 	"author": "David Losert",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Charminbear/gulp-subdir-rename"
+	},
 	"devDependencies": {
 		"chai": "^2.2.0",
 		"gulp": "^3.8.11",
