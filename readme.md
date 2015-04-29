@@ -69,11 +69,11 @@ Also see the '/examples'-Folder for a work example, just execute gulp.
 `gulp-subdir-rename` renames the first subfolder after the base-path of what you `gulp.src()`. The base-path is usually
 where the glob starts, so for example for a  `gulp.src('/base/path/**')` it would be `/base/path`.
 
-`require(gulp-subdir-rename)` returns a function that accepts an options-object with two parameters:
+`require('gulp-subdir-rename')` returns a function that accepts an options-object with two parameters:
 
 * **baseFile** - *string* : Path to the file you wanna pull the subdirectories name from. The Path must be relative
 to the subdirectory that's to be renamed (so the first directory after the base-path). It's content will be given as a
-paramter to `renameTo()`. 
+paramter to `renameTo()`.
 * **renameTo** - *function(baseFileContent)* : The functions return value will be used as the new subdirectories name.
 It's parameter are the contents of the specified `baseFile` (as a string).
 
