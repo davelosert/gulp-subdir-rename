@@ -83,19 +83,9 @@ describe('stream', function () {
 		});
 	});
 
-	it('should call mapFileFinder to get mapFilePath', function () {
-		myStream.write(testFile);
-		expect(mapFileFinderStub.findFullMapFilePath).to.have.been.called;
-	});
-
 	it('should call mapFileFinder with "file" and "baseFile" from options', function () {
 		myStream.write(testFile);
 		expect(mapFileFinderStub.findFullMapFilePath).to.have.been.calledWith(testFile, options.baseFile);
-	});
-
-	it('should call options.renameTo', function () {
-		myStream.write(testFile);
-		expect(options.renameTo).to.have.been.called;
 	});
 
 	it('should call options.renameTo with the contents of the mapfile', function () {
