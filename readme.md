@@ -48,19 +48,19 @@ With `gulp-subdir-rename`, it is as easy as this:
 // gulpfile.js
 
 var gulp = require('gulp'),
-	subdirRename = require('gulp-subdir-rename');
+    subdirRename = require('gulp-subdir-rename');
 
 
 gulp.task('default', function () {
-	gulp.src('./source/**/**.*')
-		.pipe(subdirRename({
-			baseFile : './module.json',
-			renameTo : function (baseFileData) {
-				var moduleJSON = JSON.parse(baseFileData);
-				return moduleJSON.moduleName;
-			}
-		}))
-		.pipe(gulp.dest('./target'));
+    gulp.src('./source/**/**.*')
+        .pipe(subdirRename({
+            baseFile : './module.json',
+            renameTo : function (baseFileData) {
+                var moduleJSON = JSON.parse(baseFileData);
+                return moduleJSON.moduleName;
+            }
+        }))
+        .pipe(gulp.dest('./target'));
 });
 ```
 Also see the '/examples'-Folder for a work example, just execute gulp.
@@ -74,8 +74,9 @@ where the glob starts, so for example for a  `gulp.src('/base/path/**')` it woul
 * **baseFile** - *string* : Path to the file you wanna pull the subdirectories name from. The Path must be relative
 to the subdirectory that's to be renamed (so the first directory after the base-path). It's content will be given as a
 paramter to `renameTo()`.
-* **renameTo** - *function(baseFileContent)* : The functions return value will be used as the new subdirectories name.
-It's parameter are the contents of the specified `baseFile` (as a string).
+* **renameTo** - *function(baseFileContent, oldSubDirName)* : The functions return value will be used as the new subdirectories name.
+It's first parameter are the contents of the specified `baseFile` (as a string) and second parameter is `old name of directory` that will be changed. If `""`or `undefined` or `null` is returned from the function then no rename is done and folder is copied as it is.
+* **isOptional** - *boolean* : When `baseFile` is not found in folder, processing checks for `isOptional` flag and if its `false` then it throws error otherwise it continues to process with old name. In case of `isOptional = true` and no `baseFile` present in folder, `renameTo` function will receive `baseFileContent` as `undefined` or `null`, in such case implementor can use second argument, that is old name and process on it to generate and return new name to be used for the folder. When `isOpional = true` and there are files in base folder then those files will be copied as it is. Default value is `false`.
 
 ### Limitations
 There are some limitations to the functionality of this plugin, as it is suffice as it is to my own requirements

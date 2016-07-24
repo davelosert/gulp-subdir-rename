@@ -20,7 +20,7 @@ function subdirRename(options) {
 		var mapFilePath = mapFileFinder.findFullMapFilePath(file, options.baseFile);
 		var oldSubDirName = mapFileFinder.findFirstDistinctFolder(file.base, file.path);
 
-		findNewSubPath(mapFilePath, function (err, newSubDirName) {
+		findNewSubPath(mapFilePath, oldSubDirName, function (err, newSubDirName) {
             if(err){
                 self.emit('error', new gutil.PluginError(PLUGIN_NAME, PLUGIN_NAME + ' - Error while reading baseFile: ' + err.message));
             }
@@ -31,17 +31,17 @@ function subdirRename(options) {
 		});
 	};
 
-	function findNewSubPath(mapFilePath, cb) {
+	function findNewSubPath(mapFilePath, oldSubDirName, cb) {
 		if (pathMapStore.get(mapFilePath)) {
 			var newSubDirName = pathMapStore.get(mapFilePath);
 			cb(null, newSubDirName);
 		} else {
 			fs.readFile(mapFilePath, function (err, data) {
-                if (err) {
+                if (err && !options.isOptional) {
                     return cb(err);
                 }
 
-                var newSubPathName = options.renameTo(data);
+                var newSubPathName = options.renameTo(data, oldSubDirName) || oldSubDirName;
                 pathMapStore.set(mapFilePath, newSubPathName);
                 cb(null, newSubPathName);
 			});
