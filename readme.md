@@ -76,7 +76,7 @@ to the subdirectory that's to be renamed (so the first directory after the base-
 paramter to `renameTo()`.
 * **renameTo** - *function(baseFileContent, oldSubDirName)* : The functions return value will be used as the new subdirectories name.
 It's first parameter are the contents of the specified `baseFile` (as a string) and second parameter is `old name of directory` that will be changed. If `""`or `undefined` or `null` is returned from the function then no rename is done and folder is copied as it is.
-* **isOptional** - *boolean* : When `baseFile` is not found in folder, processing checks for `isOptional` flag and if its `false` then it throws error otherwise it continues to process with old name. In case of `isOptional = true` and no `baseFile` present in folder, `renameTo` function will receive `baseFileContent` as `undefined` or `null`, in such case implementor can use second argument, that is old name and process on it to generate and return new name to be used for the folder. When `isOpional = true` and there are files in base folder then those files will be copied as it is. Default value is `false`.
+* **isOptional** - *boolean (default: false)* : set this to true if you have folders which do not contain the baseFile. Per default, those folders would cause an error. If set to true, those folders will then just be copied as they are with their original dir-name.
 
 ### Limitations
 There are some limitations to the functionality of this plugin, as it is suffice as it is to my own requirements
