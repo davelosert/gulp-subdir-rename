@@ -1,6 +1,6 @@
 {
 	"name": "gulp-subdir-rename",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Dynamically rename subdirectories on a per-file-basis.",
 	"main": "index.js",
 	"scripts": {
